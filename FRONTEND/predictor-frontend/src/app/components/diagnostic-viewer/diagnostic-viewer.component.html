@@ -1,0 +1,77 @@
+<section class="bg-slate-100 rounded-xl p-8 border-2 border-dashed flex flex-col items-center text-center mb-6">
+
+    <input #fileInput type="file" hidden accept="image/png, image/jpeg" (change)="onFileSelected($event)">
+
+    <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-4 shadow">
+      <span class="material-icons text-blue-600 text-3xl">cloud_upload</span>
+    </div>
+
+    <h3 class="font-bold text-lg">Upload Retinal Image</h3>
+    <p class="text-sm text-slate-500 mb-4">Click to browse files</p>
+
+    <button 
+      (click)="fileInput.click()"
+      class="px-6 py-2 bg-blue-600 text-white rounded-lg">
+      Select Image
+    </button>
+
+    <!-- Spinner -->
+    <div *ngIf="isProcessing" class="mt-4 flex flex-col items-center">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <p class="text-sm mt-2">Analyzing image...</p>
+    </div>
+
+  </section>
+
+  <!-- Viewer -->
+  <div #container class="relative overflow-hidden bg-slate-100 rounded-xl border aspect-square flex items-center justify-center">
+    
+    <div #imageWrapper
+  class="transition-transform duration-200 cursor-grab active:cursor-grabbing select-none"
+  [style.transform]="'translate(' + translateX + 'px,' + translateY + 'px) scale(' + zoomLevel + ')'"
+  (mousedown)="onMouseDown($event)"
+  (mousemove)="onMouseMove($event)"
+  (mouseup)="onMouseUp()"
+  (mouseleave)="onMouseUp()"
+>
+      <img *ngIf="imagePreview; else empty"
+           [src]="imagePreview"
+           class="max-w-full h-auto shadow-lg pointer-events-none">
+    </div>
+
+    <ng-template #empty>
+      <p class="text-slate-400">No image uploaded</p>
+    </ng-template>
+
+    <!-- Controls -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-4 px-6 py-3 bg-white/90 rounded-full shadow">
+      <button (click)="adjustZoom(-0.1)">-</button>
+      <span>{{ (zoomLevel * 100).toFixed(0) }}%</span>
+      <button (click)="adjustZoom(0.1)">+</button>
+      <button (click)="resetZoom()">Reset</button>
+    </div>
+
+  </div>
+
+  @if (showError) {
+  <div class="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+    
+    <div class="bg-white px-8 py-6 rounded-2xl shadow-2xl text-center w-80">
+      
+      <div class="text-red-500 text-3xl mb-2">⚠️</div>
+
+      <h3 class="font-bold text-lg mb-2">Invalid file</h3>
+      <p class="text-sm text-slate-500 mb-4">
+        Only PNG or JPG images are allowed
+      </p>
+
+      <button 
+        (click)="showError = false"
+        class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+        OK
+      </button>
+
+    </div>
+
+  </div>
+}

@@ -1,0 +1,188 @@
+
+
+<div class="flex h-screen bg-[#f8f9fa]">
+  <!-- Sidebar -->
+  <aside class="w-64 border-r border-slate-200 bg-white p-6 hidden lg:flex flex-col">
+    <div class="flex items-center gap-3 mb-10">
+      <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+        <span class="material-icons">biotech</span>
+      </div>
+      <div>
+        <h2 class="font-bold text-slate-900 leading-tight">Clinical Suite</h2>
+        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">V3.2.0-Alpha</p>
+      </div>
+    </div>
+
+    <nav class="space-y-2 flex-1">
+      <a href="#" class="flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-700 rounded-xl font-bold transition-all">
+        <span class="material-icons text-xl">visibility</span> <div class="text-sm text-slate-500">
+  ID: P#{{ patient?.id || '' }}
+</div>
+      </a>
+      
+      <a (click)="goToHistory()" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-xl transition-all  cursor-pointer">
+        <span class="material-icons text-xl">history</span> <div class="text-sm text-slate-500">Patient History</div>
+      </a>
+      
+    </nav>
+
+    <button class="mt-auto w-full py-4 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all flex items-center justify-center gap-2">
+      <span class="material-icons">add</span> New Analysis
+    </button>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 overflow-y-auto">
+    <!-- Top Nav -->
+    <header class="h-16 border-b border-slate-200 bg-white/80 backdrop-blur sticky top-0 z-10 px-8 flex items-center justify-between">
+      <h1 class="text-lg font-extrabold text-[#00478d]">Aura Diagnostics</h1>
+      <div class="flex items-center gap-6">
+        <div class="relative">
+          <input type="text" placeholder="Search patients..." class="pl-10 pr-4 py-2 bg-slate-100 rounded-lg text-sm border-none focus:ring-2 focus:ring-blue-500 w-64">
+          <span class="material-icons absolute left-3 top-2 text-slate-400 text-sm">search</span>
+        </div>
+        <div class="flex gap-4 items-center border-l pl-6 border-slate-200">
+
+          <div class="relative dropdown-container font-['Manrope']">
+          <button class="p-2 rounded-full text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition">
+    <span class="material-icons text-2xl">notifications</span>
+  </button>
+
+  <!-- Settings -->
+  <button 
+    (click)="toggleDropdown()" 
+    class="p-2 rounded-full text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition"
+  >
+    <span class="material-icons text-2xl">settings</span>
+  </button>
+          <div class="relative font-['Manrope']">
+  <!-- Gear Icon Trigger -->
+  
+
+  <!-- Dropdown Menu -->
+  @if (isOpen()) {
+
+    <!-- Backdrop to close when clicking away -->
+    <div class="fixed inset-0 z-40" (click)="closeDropdown()"></div>
+
+    <div 
+      class="absolute right-0 mt-0 w-56 bg-white rounded-2xl border border-slate-100 shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200"
+      (clickOutside)="closeDropdown()"
+    >
+      <!-- Dashboard Option -->
+      <button 
+        (click)="navigateToDashboard()"
+        class="w-full px-4 py-3 flex items-center gap-3 text-slate-600 hover:bg-slate-50 transition-colors group"
+      >
+        <div class="p-2 bg-slate-50 rounded-lg group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+          <span class="material-icons text-sm">dashboard</span>
+        </div>
+        <span class="text-sm font-bold">Dashboard</span>
+      </button>
+
+      <div class="h-px bg-slate-50 my-1 mx-4"></div>
+
+      <!-- Logout Option -->
+      <button 
+        (click)="onLogout()"
+        class="w-full px-4 py-3 flex items-center gap-3 text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors group"
+      >
+        <div class="p-2 bg-slate-50 rounded-lg group-hover:bg-red-100 transition-colors">
+          <span class="material-icons text-sm">logout</span>
+        </div>
+        <span class="text-sm font-bold">Logout</span>
+      </button>
+    </div>
+
+    
+  }
+</div>
+        </div>
+      </div>
+    </div>
+    </header>
+
+    <div class="p-8 max-w-7xl mx-auto">
+      <div class="grid grid-cols-12 gap-8">
+        
+        <!-- Diagnostic Workspace -->
+        <div class="col-span-12 lg:col-span-8 space-y-6">
+          <div class="mb-2">
+            <span class="text-[11px] font-bold text-blue-600 uppercase tracking-[0.2em]">Diagnostic Module</span>
+            <h2 class="text-3xl font-extrabold text-slate-900">Diabetic Retinopathy Grading</h2>
+          </div>
+
+          <!-- Component for Image Interaction -->
+          <app-diagnostic-viewer [imageUrl]="currentImage" (predictionReady)="handlePrediction($event)"></app-diagnostic-viewer>
+        </div>
+
+        <!-- Results Sidebar -->
+        <div class="col-span-12 lg:col-span-4 space-y-6">
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+            <h3 class="font-bold text-slate-900 mb-6 flex justify-between items-center">
+              Model Analysis <span class="material-icons text-slate-400">more_vert</span>
+            </h3>
+            
+            <div class="bg-blue-50/50 rounded-xl p-6 border border-blue-100 mb-6">
+              <span class="text-[10px] font-bold text-blue-700 uppercase tracking-widest">Calculated Grade</span>
+              <div class="flex items-baseline gap-2 mt-2">
+                <span class="text-2xl font-black text-slate-900">Diagnóstico</span>
+                <span class="text-slate-500 font-medium">/ {{ predictionResult?.predicted_class || 'Waiting...' }}</span>
+              </div>
+              <div class="mt-4">
+                <div class="flex justify-between text-xs font-bold mb-1">
+                  <span class="text-slate-500">Porcentaje de confianza</span>
+                  <span class="text-blue-700">{{ predictionResult?.confidence  || '0' }}%</span>
+                </div>
+                <div class="h-2 bg-blue-100 rounded-full overflow-hidden">
+                  <div 
+  class="h-full bg-blue-600"
+  [style.width.%]="predictionResult?.confidence || 0">
+</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <label class="block">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Clinician Notes</span>
+                <textarea rows="8" class="mt-4 block w-full h-64 rounded-xl border-slate-200 bg-slate-50/50 text-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Enter observations...">{{ predictionResult?.feedback || '...' }}</textarea>
+              </label>
+              
+              <button  (click)="saveAnalysis()" class="w-full py-4 bg-slate-900 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-black transition-all">
+                <span class="material-icons text-sm">check_circle</span> Confirm & Save Analysis
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+@if (showSuccess()) {
+  <div class="fixed inset-0 flex items-center justify-center z-50">
+    
+    <!-- Fondo oscuro -->
+    <div class="absolute inset-0 bg-black/40"></div>
+
+    <!-- Popup -->
+    <div class="relative bg-white rounded-2xl shadow-2xl px-10 py-8 text-center animate-in fade-in zoom-in">
+      
+      <div class="text-green-500 text-5xl mb-4">
+        ✔
+      </div>
+
+      <h2 class="text-2xl font-bold text-slate-800">
+        Registro creado con éxito
+      </h2>
+
+      <p class="text-slate-500 mt-2">
+        El análisis fue guardado correctamente
+      </p>
+
+    </div>
+  </div>
+}
+

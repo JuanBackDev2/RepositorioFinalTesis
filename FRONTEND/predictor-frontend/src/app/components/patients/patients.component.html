@@ -1,0 +1,238 @@
+<div class="flex h-screen bg-slate-50 font-['Manrope']">
+  <!-- Side Navigation (Consistent with Diagnostic Suite) -->
+  <aside class="w-64 border-r border-slate-200 bg-white p-6 hidden lg:flex flex-col">
+    <div class="mb-10">
+      <h2 class="font-bold text-slate-900">Clinical Suite</h2>
+      <p class="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">North Wing Unit</p>
+    </div>
+
+    <nav class="space-y-1 flex-1">
+  
+      <a href="#" class="flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-700 rounded-xl font-bold transition-all">
+        <span class="material-icons">dashboard</span> Dashboard
+      </a>
+      <!-- ... other links ... -->
+    </nav>
+
+    <button (click)="openModal()" class="mt-auto w-full py-4 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all flex items-center justify-center gap-2">
+      <span class="material-icons">add</span> New Patient
+    </button>
+  </aside>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 overflow-y-auto">
+    <!-- Top Header -->
+    <header class="h-16 border-b border-slate-200 bg-white/80 backdrop-blur sticky top-0 z-10 px-8 flex items-center justify-between">
+  <h1 class="text-lg font-extrabold text-[#00478d]">Aura Diagnostics</h1>
+
+  <div class="flex items-center gap-6">
+
+    <!-- Search -->
+    <div class="relative">
+      <input type="text" placeholder="Search patients..." class="pl-10 pr-4 py-2 bg-slate-100 rounded-lg text-sm border-none focus:ring-2 focus:ring-blue-500 w-64">
+      <span class="material-icons absolute left-3 top-2 text-slate-400 text-sm">search</span>
+    </div>
+
+    <!-- 🔥 ICONS + DROPDOWN -->
+    <div class="flex gap-4 items-center border-l pl-6 border-slate-200 relative">
+
+      <!-- 🔔 Notifications -->
+       <button class="p-2 rounded-full text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition">
+    <span class="material-icons text-2xl">notifications</span>
+  </button>
+
+      <!-- 👤 Avatar (TRIGGER DEL DROPDOWN) -->
+      <img 
+        src="userrr.jpg" 
+        class="w-8 h-8 rounded-full border border-slate-200 cursor-pointer"
+        (click)="toggleDropdown() ; $event.stopPropagation()"
+      >
+
+      <!-- 🔥 DROPDOWN -->
+      @if (isOpen()) {
+
+        <!-- backdrop -->
+        <div class="fixed inset-0 z-40" (click)="closeDropdown()"></div>
+
+        <!-- menu -->
+        <div class="absolute right-0 top-full mt-3 w-56 bg-white rounded-2xl border border-slate-100 shadow-2xl py-2 z-50">
+
+          <!-- Dashboard -->
+          <button 
+            (click)="navigateToDashboard()"
+            class="w-full px-4 py-3 flex items-center gap-3 text-slate-600 hover:bg-slate-50 transition group"
+          >
+            <div class="p-2 bg-slate-50 rounded-lg group-hover:bg-blue-50 group-hover:text-blue-600">
+              <span class="material-icons text-sm">dashboard</span>
+            </div>
+            <span class="text-sm font-bold">Dashboard</span>
+          </button>
+
+          <div class="h-px bg-slate-100 my-1 mx-4"></div>
+
+          <!-- Logout -->
+          <button 
+            (click)="onLogout()"
+            class="w-full px-4 py-3 flex items-center gap-3 text-slate-500 hover:bg-red-50 hover:text-red-600 transition group"
+          >
+            <div class="p-2 bg-slate-50 rounded-lg group-hover:bg-red-100">
+              <span class="material-icons text-sm">logout</span>
+            </div>
+            <span class="text-sm font-bold">Logout</span>
+          </button>
+
+        </div>
+      }
+
+    </div>
+  </div>
+</header>
+
+    <div class="p-8 max-w-7xl mx-auto space-y-8">
+      <div>
+        <h2 class="text-3xl font-extrabold text-slate-900">Patient Directory</h2>
+        <p class="text-slate-500 mt-1">Manage and monitor active clinical records for the North Wing.</p>
+      </div>
+
+      <!-- Stats Summary -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+          <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><span class="material-icons">person</span></div>
+          <div>
+            <p class="text-xs font-bold text-slate-400 uppercase">Total Patients</p>
+            <p class="text-2xl font-black text-slate-900">1,284</p>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+        <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+          <span class="material-icons">schedule</span>
+        </div>
+        <div>
+          <p class="text-xs font-bold text-slate-400 uppercase">Today's Visits</p>
+          <p class="text-2xl font-black text-slate-900">42</p>
+        </div>
+      </div>
+        <!-- ... more stat cards ... -->
+      </div>
+
+      <!-- Patient Table Container -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+          <h3 class="font-bold text-slate-900">Active Patients</h3>
+          <button class="p-2 text-slate-400 hover:text-slate-600"><span class="material-icons">filter_list</span></button>
+        </div>
+        
+        <table class="w-full text-left">
+          <thead class="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">
+            <tr>
+              <th class="px-6 py-4">Patient Name</th>
+              <th class="px-6 py-4">ID Number</th>
+              <th class="px-6 py-4">Status</th>
+              <th class="px-6 py-4">Last Visit</th>
+              <th class="px-6 py-4 text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            @for (p of filteredPatients(); track p.id) {
+              <tr class="hover:bg-slate-50/50 transition-colors group">
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">
+                      {{ p.name | slice:0:1 }}
+                    </div>
+                    <div>
+                      <p class="font-bold text-slate-900 text-sm">{{ p.name }}</p>
+                      <p class="text-xs text-slate-500">{{ p.age }} y.o • {{ p.gender }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 text-sm font-medium text-slate-600">#{{ p.id }}</td>
+                <td class="px-6 py-4">
+                  <span class="px-3 py-1 rounded-full text-[10px] font-bold"
+                    [ngClass]="{
+                      'bg-green-100 text-green-700': p.status === 'STABLE',
+                      'bg-red-100 text-red-700': p.status === 'CRITICAL',
+                      'bg-slate-100 text-slate-600': p.status === 'SCHEDULED'
+                    }">
+                    {{ p.status }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-sm text-slate-500">{{ p.lastVisit }}</td>
+                <td class="px-6 py-4 text-right">
+                  <button (click)="goToPatient(p)" class="text-blue-600 font-bold text-xs hover:underline">Seguimiento</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add Patient Modal (Simplified Logic) -->
+  @if (isModalOpen()) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm">
+      <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl p-8 transform animate-in fade-in zoom-in duration-200">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-black text-slate-900">Add New Patient</h2>
+          <button (click)="closeModal()" class="text-slate-400 hover:text-slate-600"><span class="material-icons">close</span></button>
+        </div>
+        
+        <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="space-y-4">
+
+          <!-- Name -->
+          <div>
+            <label class="text-xs font-bold text-slate-500 uppercase">Name</label>
+            <input 
+              type="text"
+              formControlName="name"
+              class="mt-2 w-full px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              placeholder="Enter patient name">
+          </div>
+
+          <!-- Age -->
+          <div>
+            <label class="text-xs font-bold text-slate-500 uppercase">Age</label>
+            <input 
+              type="number"
+              formControlName="age"
+              class="mt-2 w-full px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              placeholder="Enter age">
+          </div>
+
+          <!-- Gender -->
+          <div>
+            <label class="text-xs font-bold text-slate-500 uppercase">Gender</label>
+            <select 
+              formControlName="gender"
+              class="mt-2 w-full px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+              <option value="Female">Female</option>
+              <option value="Male">Male</option>
+              <option value="Male">Other</option>
+            </select>
+          </div>
+
+          <!-- Status -->
+          <div>
+            <label class="text-xs font-bold text-slate-500 uppercase">Status</label>
+            <select 
+              formControlName="status"
+              class="mt-2 w-full px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+              <option value="STABLE">Stable</option>
+              <option value="CRITICAL">Critical</option>
+              <option value="SCHEDULED">Scheduled</option>
+            </select>
+          </div>
+
+          <!-- Submit -->
+          <button 
+            type="submit" 
+            class="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-black transition-all">
+            Register Patient
+          </button>
+
+        </form>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,167 @@
+
+
+<div class="flex h-screen bg-[#f8f9fa] font-['Manrope']">
+  <!-- Sidebar (Consistent with Suite) -->
+  <aside class="w-64 border-r border-slate-200 bg-white p-6 hidden lg:flex flex-col">
+    <div class="flex items-center gap-3 mb-10">
+      <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+        <span class="material-icons">biotech</span>
+      </div>
+      <div>
+        <h2 class="font-bold text-slate-900 leading-tight">Clinical Suite</h2>
+        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">V3.2.0-Alpha</p>
+      </div>
+    </div>
+
+    <nav class="space-y-2 flex-1">
+       
+      <a (click)="goToPatient()"  class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-xl transition-all cursor-pointer">
+        <span class="material-icons text-xl">visibility</span> <div class="text-sm text-slate-500">
+  ID: P# {{ patient?.id || '' }}
+</div>
+      </a>
+      
+      <a  class="flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-700 rounded-xl font-bold transition-all">
+        <span class="material-icons text-xl">history</span> Patient History
+      </a>
+    </nav>
+
+    <button class="mt-auto w-full py-4 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all flex items-center justify-center gap-2">
+      <span class="material-icons">add</span> New Analysis
+    </button>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 overflow-y-auto">
+    <!-- Top Nav -->
+    <header class="h-16 border-b border-slate-200 bg-white px-8 flex items-center justify-between">
+      <h1 class="text-lg font-extrabold text-[#00478d]">Aura Diagnostics</h1>
+      <div class="flex items-center gap-6">
+        <div class="relative">
+          <input type="text" placeholder="Search patients..." class="pl-10 pr-4 py-2 bg-slate-100 rounded-lg text-sm border-none focus:ring-2 focus:ring-blue-500 w-64">
+          <span class="material-icons absolute left-3 top-2 text-slate-400 text-sm">search</span>
+        </div>
+        <div class="flex gap-4 items-center border-l pl-6 border-slate-200">
+
+          <div class="relative dropdown-container font-['Manrope']">
+          <button class="p-2 rounded-full text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition">
+    <span class="material-icons text-xl">notifications</span>
+  </button>
+
+  <!-- Settings -->
+  <button 
+    (click)="toggleDropdown()" 
+    class="p-2 rounded-full text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition"
+  >
+    <span class="material-icons text-xl">settings</span>
+  </button>
+          <div class="relative font-['Manrope']">
+  <!-- Gear Icon Trigger -->
+  
+
+  <!-- Dropdown Menu -->
+  @if (isOpen()) {
+
+    <!-- Backdrop to close when clicking away -->
+    <div class="fixed inset-0 z-40" (click)="closeDropdown()"></div>
+
+    <div 
+      class="absolute right-0 mt-0 w-56 bg-white rounded-2xl border border-slate-100 shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200"
+      (clickOutside)="closeDropdown()"
+    >
+      <!-- Dashboard Option -->
+      <button 
+        (click)="navigateToDashboard()"
+        class="w-full px-4 py-3 flex items-center gap-3 text-slate-600 hover:bg-slate-50 transition-colors group"
+      >
+        <div class="p-2 bg-slate-50 rounded-lg group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+          <span class="material-icons text-sm">dashboard</span>
+        </div>
+        <span class="text-sm font-bold">Dashboard</span>
+      </button>
+
+      <div class="h-px bg-slate-50 my-1 mx-4"></div>
+
+      <!-- Logout Option -->
+      <button 
+        (click)="onLogout()"
+        class="w-full px-4 py-3 flex items-center gap-3 text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors group"
+      >
+        <div class="p-2 bg-slate-50 rounded-lg group-hover:bg-red-100 transition-colors">
+          <span class="material-icons text-sm">logout</span>
+        </div>
+        <span class="text-sm font-bold">Logout</span>
+      </button>
+    </div>
+
+    
+  }
+</div>
+        </div>
+      </div>
+    
+      </div>
+    </header>
+
+    <div class="p-8 max-w-5xl mx-auto">
+      <!-- Report Container -->
+      <div class="bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col md:flex-row">
+        
+        <!-- Report Details (Left) -->
+        <div class="p-12 flex-1 space-y-8">
+          <div class="flex justify-between items-start border-b border-slate-100 pb-8">
+            <div>
+              <span class="text-[11px] font-bold text-blue-600 uppercase tracking-widest">Diagnostic Report</span>
+              <h2 class="text-3xl font-black text-slate-900 mt-2">Retinal Grading Summary</h2>
+              <div class="mt-4 flex gap-6 text-xs text-slate-500">
+                <p><span class="block text-slate-400 font-bold uppercase text-[9px] mb-1">Report ID</span> {{ report.id }}</p>
+                <p><span class="block text-slate-400 font-bold uppercase text-[9px] mb-1">Issued</span> {{ report.date }}</p>
+                
+              </div>
+            </div>
+            <span class="px-4 py-1.5 bg-green-50 text-green-700 text-xs font-bold rounded-full border border-green-100">
+              Verified: {{ report.status }}
+            </span>
+          </div>
+
+          <div class="space-y-6">
+            <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Clinical Observations</h3>
+            <p class="bg-slate-50 rounded-2xl p-8 border border-slate-100 text-slate-600 italic text-lg leading-relaxed">
+              "{{ report.summary }}"
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-6">
+            <div class="p-6 bg-blue-50/50 rounded-2xl border border-blue-100">
+               <p class="text-[10px] font-bold text-blue-600 uppercase tracking-widest mb-1">Confidence Score</p>
+               <p class="text-2xl font-black text-slate-900">{{ report.confidence }}</p>
+            </div>
+            <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200">
+               <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Recommendation</p>
+               <p class="text-sm font-bold text-slate-700">{{ report.feedback }}</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4 pt-6">
+            <button (click)="downloadPDF()" class="px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold flex items-center gap-3 hover:bg-black transition-all">
+              <span class="material-icons">download</span> Download PDF
+            </button>
+            <button (click)="printReport()" class="px-8 py-4 text-slate-500 font-bold hover:text-blue-600 transition-all">
+              Print Report
+            </button>
+          </div>
+        </div>
+
+        <!-- Retina Image (Right) -->
+        <div class="w-full md:w-[380px] bg-white flex items-center justify-center p-6">
+          <img 
+    [src]="report.imageUrl" 
+    class="max-w-full max-h-[500px] object-contain rounded-xl shadow-sm"
+  />
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>

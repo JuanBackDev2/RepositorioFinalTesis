@@ -1,0 +1,203 @@
+
+
+<div class="flex h-screen bg-[#f8f9fa]">
+  <!-- Sidebar -->
+  <aside class="w-64 border-r border-slate-200 bg-white p-6 hidden lg:flex flex-col">
+    <div class="flex items-center gap-3 mb-10">
+      <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+        <span class="material-icons">biotech</span>
+      </div>
+      <div>
+        <h2 class="font-bold text-slate-900 leading-tight">Clinical Suite</h2>
+        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">V3.2.0-Alpha</p>
+      </div>
+    </div>
+
+    <nav class="space-y-2 flex-1">
+       
+      <a (click)="goToPatient()"  class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-xl transition-all cursor-pointer">
+        <span class="material-icons text-xl">visibility</span> <div class="text-sm text-slate-500">
+  ID: P# {{ patient?.id || '' }}
+</div>
+      </a>
+      
+      <a  class="flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-700 rounded-xl font-bold transition-all">
+        <span class="material-icons text-xl">history</span> Patient History
+      </a>
+    </nav>
+
+    <button class="mt-auto w-full py-4 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all flex items-center justify-center gap-2">
+      <span class="material-icons">add</span> New Analysis
+    </button>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 overflow-y-auto">
+    <!-- Top Nav -->
+    <header class="h-16 border-b border-slate-200 bg-white/80 backdrop-blur sticky top-0 z-10 px-8 flex items-center justify-between">
+      <h1 class="text-lg font-extrabold text-[#00478d]">Aura Diagnostics</h1>
+      <div class="flex items-center gap-6">
+        <div class="relative">
+          <input type="text" placeholder="Search patients..." class="pl-10 pr-4 py-2 bg-slate-100 rounded-lg text-sm border-none focus:ring-2 focus:ring-blue-500 w-64">
+          <span class="material-icons absolute left-3 top-2 text-slate-400 text-sm">search</span>
+        </div>
+        <div class="flex gap-4 items-center border-l pl-6 border-slate-200">
+
+          <div class="relative dropdown-container font-['Manrope']">
+          <button class="p-2 rounded-full text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition">
+    <span class="material-icons text-xl">notifications</span>
+  </button>
+
+  <!-- Settings -->
+  <button 
+    (click)="toggleDropdown()" 
+    class="p-2 rounded-full text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition"
+  >
+    <span class="material-icons text-xl">settings</span>
+  </button>
+          <div class="relative font-['Manrope']">
+  <!-- Gear Icon Trigger -->
+  
+
+  <!-- Dropdown Menu -->
+  @if (isOpen()) {
+
+    <!-- Backdrop to close when clicking away -->
+    <div class="fixed inset-0 z-40" (click)="closeDropdown()"></div>
+
+    <div 
+      class="absolute right-0 mt-0 w-56 bg-white rounded-2xl border border-slate-100 shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200"
+      (clickOutside)="closeDropdown()"
+    >
+      <!-- Dashboard Option -->
+      <button 
+        (click)="navigateToDashboard()"
+        class="w-full px-4 py-3 flex items-center gap-3 text-slate-600 hover:bg-slate-50 transition-colors group"
+      >
+        <div class="p-2 bg-slate-50 rounded-lg group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
+          <span class="material-icons text-sm">dashboard</span>
+        </div>
+        <span class="text-sm font-bold">Dashboard</span>
+      </button>
+
+      <div class="h-px bg-slate-50 my-1 mx-4"></div>
+
+      <!-- Logout Option -->
+      <button 
+        (click)="onLogout()"
+        class="w-full px-4 py-3 flex items-center gap-3 text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors group"
+      >
+        <div class="p-2 bg-slate-50 rounded-lg group-hover:bg-red-100 transition-colors">
+          <span class="material-icons text-sm">logout</span>
+        </div>
+        <span class="text-sm font-bold">Logout</span>
+      </button>
+    </div>
+
+    
+  }
+</div>
+        </div>
+      </div>
+    
+      </div>
+    </header>
+
+    <div class="p-8 max-w-7xl mx-auto">
+      <div class="grid grid-cols-12 gap-8">
+        
+        <!-- Diagnostic Workspace -->
+        <div class="col-span-12 lg:col-span-10 lg:col-start-2 space-y-6">
+          
+
+          <!-- Component for Image Interaction -->
+        <div class="p-8 max-w-7xl mx-auto space-y-8 font-['Manrope']">
+        <!-- Header -->
+        <div class="flex justify-between items-end border-b border-slate-100 pb-6">
+            <div>
+            <span class="text-[11px] font-bold text-blue-600 uppercase tracking-widest">Medical Records</span>
+            <h2 class="text-3xl font-black text-slate-900 mt-1">Patient History</h2>
+            <p class="text-slate-500 text-sm mt-1">Viewing records for <span class="font-bold text-slate-700">{{ patient?.name || '' }}</span> (ID: {{ patient?.id || '' }})</p>
+            </div>
+            <button class="px-5 py-2.5 bg-slate-100 text-slate-600 rounded-xl text-sm font-bold hover:bg-slate-200 transition-all flex items-center gap-2">
+            <span class="material-icons text-sm">filter_list</span> Filter Records
+            </button>
+        </div>
+
+        <!-- Chronological Report List -->
+        <div class="space-y-6">
+            @for (report of reports(); track report.id) {
+            <div class="group bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-all flex gap-8 items-start">
+                
+                <!-- Retina Thumbnail -->
+                <div class="w-48 aspect-square rounded-xl overflow-hidden bg-slate-100 border border-slate-200 flex-shrink-0 relative"  (click)="openImage(report.imageUrl)">
+                <img [src]="report.imageUrl" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors cursor-pointer flex items-center justify-center">
+                    <span class="material-icons text-white opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all">zoom_in</span>
+                </div>
+                </div>
+
+                <!-- Report Details -->
+                <div class="flex-1 space-y-4">
+                <div class="flex justify-between items-start">
+                    <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ report.date }}</p>
+                    <h3 class="text-xl font-extrabold text-slate-900 mt-1">Retinal Analysis Report</h3>
+                    </div>
+                    <span class="px-3 py-1 bg-green-50 text-green-700 text-[10px] font-bold rounded-full">
+                    {{ report.status }}
+                    </span>
+                </div>
+
+                <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
+                    <p class="text-sm text-slate-600 leading-relaxed italic line-clamp-3">
+                    "{{ report.summary }}"
+                    </p>
+                </div>
+
+                <div class="flex gap-4">
+                    <button  (click)="viewReport(report)" class="px-6 py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all">
+                    View Full Report
+                    </button>
+                    <button class="px-6 py-3 text-slate-500 font-bold text-sm hover:text-blue-600 transition-all">
+                    Download PDF
+                    </button>
+                </div>
+
+
+                </div>
+
+            </div>
+            }
+        </div>
+        </div>
+        </div>
+
+
+      </div>
+    </div>
+  </main>
+</div>
+
+@if (selectedImage) {
+  <div 
+    class="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+    (click)="closeImage()"
+  >
+    <img 
+      [src]="selectedImage" 
+      class="max-w-[90%] max-h-[90%] rounded-xl shadow-2xl"
+    >
+  </div>
+}
+
+
+
+
+
+
+
+
+
+
+
