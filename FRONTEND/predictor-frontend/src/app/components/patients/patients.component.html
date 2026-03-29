@@ -29,7 +29,7 @@
 
     <!-- Search -->
     <div class="relative">
-      <input type="text" placeholder="Search patients..." class="pl-10 pr-4 py-2 bg-slate-100 rounded-lg text-sm border-none focus:ring-2 focus:ring-blue-500 w-64">
+      <input type="text" placeholder="Search patients..." class="pl-10 pr-4 py-2 bg-slate-100 rounded-lg text-sm border-none focus:ring-2 focus:ring-blue-500 w-64"  (input)="searchQuery.set($any($event.target).value)">
       <span class="material-icons absolute left-3 top-2 text-slate-400 text-sm">search</span>
     </div>
 
