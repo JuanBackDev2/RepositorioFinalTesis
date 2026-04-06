@@ -30,10 +30,11 @@
 </div>
 <div class="max-w-md">
 <h1 class="font-headline text-4xl lg:text-5xl font-extrabold tracking-tight mb-6 text-white">
-                        Precision Analytics for Modern Clinicians
+                        Análisis de precisión para clínicas modernas
                     </h1>
 <p class="font-body text-lg text-primary-fixed/90 leading-relaxed mb-8 text-white">
-                        Join an elite network of healthcare providers leveraging AI-driven diagnostics for superior patient outcomes.
+                        
+                        Unase a una red élite del sector salud con diagnósticos orientados con IA, para obtener resultados superiores.
                     </p>
 <!-- Trust Badges (Intentional Asymmetry) -->
 <div class="flex flex-col gap-4 mt-12">
@@ -48,7 +49,7 @@
 </div>
 </div>
 <div class="text-sm font-label text-primary-fixed/60">
-                    © 2024 Aura Diagnostics. Clinical Portal v4.2
+                    © 2026 Aura Diagnostics. Clinical Portal v4.2
                 </div>
 </div>
 </section>
@@ -89,6 +90,21 @@
             <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Email institucional</label>
             <input formControlName="email" type="email" placeholder="sarah.m@hospital.org" 
               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+
+            <div *ngIf="
+            signUpForm.get('email')?.invalid &&
+            (signUpForm.get('email')?.dirty || signUpForm.get('email')?.touched)
+          " class="text-red-500 text-xs mt-2">
+
+            <span *ngIf="signUpForm.get('email')?.errors?.['required']">
+              El email es obligatorio
+            </span>
+
+            <span *ngIf="signUpForm.get('email')?.errors?.['email']">
+              El formato del email no es válido
+            </span>
+
+          </div>
           </div>
 
           <!-- Password -->
@@ -96,6 +112,20 @@
             <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Contraseña</label>
             <input formControlName="password" type="password" placeholder="••••••••" 
               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
+
+            <div *ngIf="
+            signUpForm.get('password')?.invalid &&
+            (signUpForm.get('password')?.dirty || signUpForm.get('password')?.touched)
+          " class="text-red-500 text-xs mt-2">
+
+            <span *ngIf="signUpForm.get('password')?.errors?.['required']">
+              La contraseña es obligatoria
+            </span>
+
+            <span *ngIf="signUpForm.get('password')?.errors?.['minlength']">
+              Mínimo 8 caracteres
+            </span>
+          </div>
           </div>
         </div>
 
